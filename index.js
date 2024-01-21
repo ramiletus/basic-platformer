@@ -44,30 +44,43 @@ class Player {
     }
 }
 
+const platformImage = new Image()
+
+//Can't get to access the image width and height properties
+//once created the Image object, since they value 0 each,
+//so I'm fixing the width and height as constants since they are known
+const platformImageSize = {
+    width: 580,
+    heigth: 125
+}
+platformImage.src = './platform.png'
+
 class Platform {
-    constructor(x, y, widht, height) {
+    constructor(x, y) {
         this.position = {
             x: x,
             y: y
         }
+
+        this.image = platformImage
+
+        console.log(this.image)
         
-        this.width = widht
-        this.height = height
+        this.width = platformImageSize.width
+        this.height = platformImageSize.height
     }
 
     draw() {
-        c.fillStyle = 'blue'
-        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+        c.drawImage(this.image, this.position.x, this.position.y)
     }
-
-
 }
 
 const player = new Player(100, 200)
 
+
 const platformArray = []
-const platform1 = new Platform(100, 100, 150, 25)
-const platform2 = new Platform(300, 250, 250, 25)
+const platform1 = new Platform(200, 100)
+const platform2 = new Platform(500, 300)
 platformArray.push(platform1)
 platformArray.push(platform2)
 
@@ -89,13 +102,16 @@ function animate() {
     c.clearRect(0, 0, canvas.width, canvas.height)
     player.update()
 
+
     if (keys.right.pressed && player.position.x < 400) {
         player.velocity.xVelocity = 3;
     } else if (keys.left.pressed && player.position.x > 100) {
         player.velocity.xVelocity = -3;
     } else {
+        //Parallex effect can be implemented here, just by
+        //adding an extra array of backgorund objects and
+        //changing their position.x by a different amount
         player.velocity.xVelocity = 0;
-
         if (keys.right.pressed) {
             scrollOffset += 5
             platformArray.forEach(platform => platform.position.x -= 3)
@@ -106,7 +122,6 @@ function animate() {
     }
 
     //collision detection with all platforms
- 
     platformArray.forEach(platform => {
         platform.draw()
         if (
@@ -121,7 +136,7 @@ function animate() {
     });
 
     if (scrollOffset > 2000) {
-        console.log("scroll offset")
+        console.log("you win")
     }
 
 }
