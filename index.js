@@ -44,14 +44,14 @@ class Player {
     }
 }
 
-const platformImage = new Image()
+let platformImage = new Image()
 
 //Can't get to access the image width and height properties
 //once created the Image object, since they value 0 each,
 //so I'm fixing the width and height as constants since they are known
-const platformImageSize = {
+let platformImageSize = {
     width: 580,
-    heigth: 125
+    height: 125
 }
 platformImage.src = './platform.png'
 
@@ -75,14 +75,8 @@ class Platform {
     }
 }
 
-const player = new Player(100, 200)
-
-
-const platformArray = []
-const platform1 = new Platform(200, 100)
-const platform2 = new Platform(500, 300)
-platformArray.push(platform1)
-platformArray.push(platform2)
+player = new Player(100, 200)
+platformArray = []
 
 const keys = {
     right: {
@@ -95,6 +89,17 @@ const keys = {
 
 let scrollOffset = 0
 
+function init(){
+    player = new Player(100, 200)
+
+    platformArray = []
+    platform1 = new Platform(200, 100)
+    platform2 = new Platform(500, 300)
+    platform3 = new Platform(0, canvas.height - platformImageSize.height)
+    platformArray.push(platform1)
+    platformArray.push(platform2)
+    platformArray.push(platform3)
+}
 player.draw()
 
 function animate() {
@@ -135,12 +140,20 @@ function animate() {
         }
     });
 
+    //Win condition
     if (scrollOffset > 2000) {
         console.log("you win")
+    }
+    
+    //Loose condition
+    if (player.position.y + player.height+ 1 > canvas.height) {
+        console.log("you loose")
+        init()
     }
 
 }
 
+init()
 animate()
 
 addEventListener('keydown', ({code}) => {
