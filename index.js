@@ -80,6 +80,8 @@ const keys = {
     }
 }
 
+let scrollOffset = 0
+
 player.draw()
 
 function animate() {
@@ -95,8 +97,10 @@ function animate() {
         player.velocity.xVelocity = 0;
 
         if (keys.right.pressed) {
+            scrollOffset += 5
             platformArray.forEach(platform => platform.position.x -= 3)
         } else if (keys.left.pressed) {
+            scrollOffset -= 5
             platformArray.forEach(platform => platform.position.x += 3)
         }
     }
@@ -115,6 +119,10 @@ function animate() {
             player.velocity.yVelocity = 0;
         }
     });
+
+    if (scrollOffset > 2000) {
+        console.log("scroll offset")
+    }
 
 }
 
